@@ -1,14 +1,14 @@
 AI-Powered Adaptive Disaster Management and Intelligent Evacuation Route Recommendation System
 Team Details
 
-Team ID: 2420090047
+Team ID: 2420030040
 
 Team Members
 Allam Greshmica – 2420030017
 Mikkineni Thanvitha – 2420030040
 Akshaya Vangalapudi – 2420090047
 
-Supervisor: [Supervisor Name]
+Supervisor: 
 
 Abstract
 
