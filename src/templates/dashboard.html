@@ -6,8 +6,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Disaster Dashboard | DisasterGuard AI</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/unified.css') }}">
+
 </head>
 <body>
+
+<aside class="dg-sidebar">
+  <div>
+    <div class="dg-brand">🛡 DisasterGuard AI</div>
+    <div class="dg-subtitle">Adaptive Disaster Management</div>
+    <a href="/dashboard" class="active">Dashboard</a>
+<a href="/hazards" class="">Hazard Zones</a>
+<a href="/map" class="">Hazard Map</a>
+<a href="/evacuation" class="">Evacuation Routes</a>
+<a href="/report" class="">Report Disaster</a>
+<a href="/" class="">Home</a>
+    <div class="dg-footer">
+      Academic Simulation<br>
+      Not for real emergency navigation
+    </div>
+  </div>
+</aside>
+
     <nav class="navbar">
         <a class="brand" href="/">🛡 DisasterGuard <span>AI</span></a>
         <div class="nav-links">
@@ -137,5 +159,6 @@ async function runDisasterAI() {
   }
 }
 </script>
+<script src="{{ url_for('static', filename='js/ai_format.js') }}"></script>
 </body>
 </html>

@@ -1,0 +1,178 @@
+
+:root {
+  --navy: #10243a;
+  --teal: #0d9488;
+}
+body {
+  margin: 0;
+  padding-left: 235px;
+  background: #f3f7fb;
+}
+.dg-sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 235px;
+  z-index: 9999;
+  background: var(--navy);
+  color: white;
+  padding: 25px 15px;
+  box-sizing: border-box;
+  overflow-y: auto;
+  font-family: Arial, sans-serif;
+}
+.dg-brand {
+  font-size: 22px;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+.dg-subtitle {
+  color: #a9c0d2;
+  font-size: 12px;
+  margin-bottom: 30px;
+}
+.dg-sidebar a {
+  display: block;
+  padding: 13px 15px;
+  margin: 6px 0;
+  border-radius: 9px;
+  color: #dce8f1;
+  text-decoration: none;
+  font-size: 14px;
+}
+.dg-sidebar a:hover,
+.dg-sidebar a.active {
+  background: var(--teal);
+  color: white;
+}
+.dg-sidebar .dg-footer {
+  margin-top: 35px;
+  font-size: 11px;
+  color: #a9c0d2;
+  line-height: 1.6;
+}
+@media (max-width: 700px) {
+  body {
+    padding-left: 0;
+    padding-top: 65px;
+  }
+  .dg-sidebar {
+    width: 100%;
+    height: 65px;
+    bottom: auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px;
+    overflow-x: auto;
+  }
+  .dg-brand {
+    font-size: 15px;
+    white-space: nowrap;
+    margin: 0;
+  }
+  .dg-subtitle, .dg-footer {
+    display: none;
+  }
+  .dg-sidebar a {
+    white-space: nowrap;
+    font-size: 12px;
+    padding: 9px;
+    margin: 0;
+  }
+}
+
+
+/* DisasterGuard UI polish */
+
+/* Hide the old top navigation only on unified pages */
+body:has(.dg-sidebar) > header,
+body:has(.dg-sidebar) > nav,
+body:has(.dg-sidebar) > .navbar,
+body:has(.dg-sidebar) > .site-header {
+    display: none !important;
+}
+
+/* Keep a consistent application layout */
+body:has(.dg-sidebar) {
+    background: #f3f7fb;
+}
+
+.dg-sidebar {
+    box-shadow: 3px 0 18px rgba(0,0,0,.08);
+}
+
+.dg-sidebar a {
+    transition: background .2s ease;
+}
+
+/* Improve form readability */
+body:has(.dg-sidebar) input,
+body:has(.dg-sidebar) select,
+body:has(.dg-sidebar) textarea {
+    font-size: 15px;
+}
+
+body:has(.dg-sidebar) button {
+    cursor: pointer;
+}
+
+/* Evacuation page improvements */
+body:has(.dg-sidebar) input[type="number"] {
+    min-width: 65px;
+    padding: 7px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+}
+
+body:has(.dg-sidebar) input[type="checkbox"] {
+    width: 17px;
+    height: 17px;
+    accent-color: #0d9488;
+}
+
+body:has(.dg-sidebar) button[type="submit"] {
+    padding: 10px 18px;
+    border-radius: 7px;
+    font-weight: 600;
+}
+
+/* AI output formatting */
+.dg-ai-formatted {
+    line-height: 1.7;
+    overflow-wrap: anywhere;
+}
+
+.dg-ai-formatted h1,
+.dg-ai-formatted h2,
+.dg-ai-formatted h3 {
+    color: #10243a;
+    margin: 18px 0 10px;
+}
+
+.dg-ai-formatted p {
+    margin: 10px 0;
+}
+
+.dg-ai-formatted ul,
+.dg-ai-formatted ol {
+    padding-left: 24px;
+}
+
+.dg-ai-formatted table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 15px 0;
+}
+
+.dg-ai-formatted th,
+.dg-ai-formatted td {
+    border: 1px solid #cbd5e1;
+    padding: 9px;
+    text-align: left;
+}
+
+.dg-ai-formatted th {
+    background: #e2f3ef;
+}

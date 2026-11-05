@@ -35,8 +35,30 @@
             color: #087f70;
         }
     </style>
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/unified.css') }}">
+
 </head>
 <body>
+
+<aside class="dg-sidebar">
+  <div>
+    <div class="dg-brand">🛡 DisasterGuard AI</div>
+    <div class="dg-subtitle">Adaptive Disaster Management</div>
+    <a href="/dashboard" class="">Dashboard</a>
+<a href="/hazards" class="">Hazard Zones</a>
+<a href="/map" class="">Hazard Map</a>
+<a href="/evacuation" class="active">Evacuation Routes</a>
+<a href="/report" class="">Report Disaster</a>
+<a href="/" class="">Home</a>
+    <div class="dg-footer">
+      Academic Simulation<br>
+      Not for real emergency navigation
+    </div>
+  </div>
+</aside>
+
     <div class="evac-container">
         <h1>Intelligent Evacuation Recommendations</h1>
         <p>Compare simulated routes using hazard severity,
