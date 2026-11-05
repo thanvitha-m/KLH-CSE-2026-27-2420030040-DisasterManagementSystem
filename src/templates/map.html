@@ -144,6 +144,7 @@
                 Loading geographic recommendation...
             </div>
 
+            <p id="shelter-note">Shelter availability is loaded from the backend simulation.</p>
             <div id="disaster-map"></div>
 
             <button
@@ -196,6 +197,7 @@
 
         const hazardLayerGroup = L.layerGroup().addTo(map);
         const routeLayerGroup = L.layerGroup().addTo(map);
+        const shelterLayerGroup = L.layerGroup().addTo(map);
 
         // ============================================
         // 3. DEMONSTRATION STARTING POINT
@@ -214,55 +216,43 @@
         // 4. DEMONSTRATION SHELTERS
         // ============================================
 
-        const demoShelters = [
-            {
-                name: "Demo Shelter Alpha",
-                location: [17.4300, 78.4400],
-                capacity: 150,
-                occupied: 65
-            },
-            {
-                name: "Demo Shelter Beta",
-                location: [17.4550, 78.4900],
-                capacity: 200,
-                occupied: 110
-            }
-        ];
+        // Shelter markers are populated from the backend response,
+        // not from hardcoded occupancy numbers.
+        const shelterLocations = {
+            "Route A - Main Road": [17.4300, 78.4400],
+            "Route B - Ring Road": [17.4550, 78.4900]
+        };
 
-        demoShelters.forEach(shelter => {
-
-            const marker = L.circleMarker(
-                shelter.location,
-                {
-                    radius: 10,
-                    color: "#087f70",
-                    fillColor: "#16a085",
-                    fillOpacity: 0.9,
-                    weight: 2
-                }
-            ).addTo(map);
-
+        function addShelterMarker(route) {
+            if (!route || !route.shelter) return;
+            const location = shelterLocations[route.name];
+            if (!location) return;
+            const shelter = route.shelter;
+            const marker = L.circleMarker(location, {
+                radius: 10,
+                color: shelter.is_full ? "#9b111e" : "#087f70",
+                fillColor: shelter.is_full ? "#e53935" : "#16a085",
+                fillOpacity: 0.9,
+                weight: 2
+            }).addTo(shelterLayerGroup);
             const popup = document.createElement("div");
-
             const title = document.createElement("strong");
             title.textContent = shelter.name;
             popup.appendChild(title);
-
             [
+                "Destination route: " + route.name,
                 "Capacity: " + shelter.capacity,
                 "Occupied: " + shelter.occupied,
-                "Available: " +
-                    (shelter.capacity - shelter.occupied),
-                "Demonstration shelter only"
+                "Available: " + shelter.available,
+                "Status: " + (shelter.is_full ? "Full" : "Spaces available"),
+                "Simulation data only"
             ].forEach(line => {
                 const p = document.createElement("p");
                 p.textContent = line;
                 popup.appendChild(p);
             });
-
             marker.bindPopup(popup);
-        });
-
+        }
 
         // ============================================
         // 5. LOAD HAZARD ZONES FROM FASTAPI
@@ -400,6 +390,7 @@
                 const result = await response.json();
 
                 routeLayerGroup.clearLayers();
+                shelterLayerGroup.clearLayers();
 
                 const recommended = result.recommended_route;
                 const alternatives = result.alternatives || [];
@@ -457,9 +448,9 @@
                         "Geographic Penalty: " +
                             route.geographic_penalty,
                         "Intersecting Hazards: " +
-                            (
-                                route.intersecting_hazards || []
-                            ).join(", ") || "None"
+                            ((route.intersecting_hazards || []).join(", ") || "None"),
+                        "Destination shelter: " + (route.shelter?.name || "Unknown"),
+                        "Available spaces: " + (route.shelter?.available ?? "Unknown")
                     ].forEach(line => {
 
                         const p = document.createElement("p");
@@ -492,6 +483,9 @@
 
                 drawRoute(recommended, true);
 
+                // Mark all eligible shelters with backend capacity data.
+                [...alternatives, recommended].forEach(addShelterMarker);
+
                 if (recommended) {
 
                     status.textContent =
@@ -502,12 +496,20 @@
                         " | Geographic Penalty: " +
                         recommended.geographic_penalty +
                         " | Hazards analyzed: " +
-                        result.hazard_zones_analyzed;
+                        result.hazard_zones_analyzed +
+                        " | Shelter: " +
+                        (recommended.shelter?.name || "Unknown") +
+                        " | Available spaces: " +
+                        (recommended.shelter?.available ?? "Unknown") +
+                        " | Full-shelter routes excluded: " +
+                        (result.full_shelter_routes || []).length;
 
                 } else {
 
                     status.textContent =
-                        "No simulated evacuation route available.";
+                        "No eligible simulated evacuation route or shelter available. " +
+                        "Full-shelter routes: " +
+                        (result.full_shelter_routes || []).join(", ");
                 }
 
                 return routeBounds;
@@ -540,7 +542,7 @@
 
             const allPoints = [
                 demoStart,
-                ...demoShelters.map(s => s.location),
+                ...Object.values(shelterLocations),
                 ...results[0],
                 ...results[1]
             ];
