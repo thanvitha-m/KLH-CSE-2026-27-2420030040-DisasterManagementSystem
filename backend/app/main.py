@@ -6,6 +6,7 @@ from fastapi import FastAPI
 from backend.app.api.routes import evacuation
 from backend.app.api.routes.disasters import router as disaster_router
 from backend.app.api.routes.hazard_zones import router as hazard_zone_router
+from backend.app.api.routes import ai_analysis
 
 app = FastAPI(
     title="AI-Powered Adaptive Disaster Management System",
@@ -19,6 +20,11 @@ Base.metadata.create_all(bind=engine)
 app.include_router(disaster_router)
 app.include_router(hazard_zone_router)
 app.include_router(evacuation.router)
+app.include_router(
+    ai_analysis.router,
+    prefix="/api/v1/ai",
+    tags=["AI Disaster Analysis"],
+)
 
 @app.get("/")
 def root():

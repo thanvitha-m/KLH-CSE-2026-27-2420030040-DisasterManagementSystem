@@ -75,5 +75,67 @@
 
         <a href="/report" class="primary-button report-link">Submit Emergency Report →</a>
     </main>
+
+<section id="disasterguard-ai-panel" style="margin:25px 0;padding:24px;border-radius:14px;background:#eef5ff;color:#172b4d;">
+  <h2>🤖 DisasterGuard AI Analysis</h2>
+  <p>Generate an AI explanation for a simulated disaster scenario.</p>
+
+  <textarea id="ai-disaster-input" rows="3"
+    style="width:100%;box-sizing:border-box;padding:12px;border:1px solid #ccc;border-radius:8px;">Simulated flood near Musi River in Hyderabad. Water levels are rising.</textarea>
+
+  <button type="button" id="ai-analyze-button"
+    onclick="runDisasterAI()"
+    style="margin-top:12px;padding:12px 22px;background:#2563eb;color:white;border:0;border-radius:8px;cursor:pointer;">
+    Analyze with AI
+  </button>
+
+  <div id="ai-analysis-result"
+    style="margin-top:18px;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.6;"></div>
+
+  <p style="font-size:12px;margin-top:14px;">
+    Academic simulation only. Not verified emergency guidance.
+  </p>
+</section>
+
+<script>
+async function runDisasterAI() {
+  const button = document.getElementById("ai-analyze-button");
+  const result = document.getElementById("ai-analysis-result");
+  const details = document.getElementById("ai-disaster-input").value.trim();
+
+  if (details.length < 10) {
+    result.textContent = "Please enter at least 10 characters.";
+    return;
+  }
+
+  button.disabled = true;
+  button.textContent = "AI is analyzing...";
+  result.textContent = "Contacting Groq AI...";
+
+  try {
+    const response = await fetch("/api/ai/analyze", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({
+        disaster_details: details,
+        route_details: "No current routing-engine result supplied."
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok || data.status !== "success") {
+      throw new Error(data.message || data.detail || "AI request failed.");
+    }
+
+    result.textContent = data.analysis || "No analysis returned.";
+  } catch (error) {
+    result.textContent = "AI unavailable: " + error.message;
+  } finally {
+    button.disabled = false;
+    button.textContent = "Analyze with AI";
+  }
+}
+</script>
 </body>
 </html>

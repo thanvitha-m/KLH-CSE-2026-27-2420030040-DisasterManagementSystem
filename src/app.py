@@ -174,5 +174,28 @@ def map_recommendation():
             "error": "Evacuation service unavailable"
         }), 503
 
+
+# DISASTERGUARD_GROQ_AI_PROXY
+@app.route("/api/ai/analyze", methods=["POST"])
+def ai_analyze_proxy():
+    from flask import request, jsonify
+    import requests
+
+    payload = request.get_json(silent=True) or {}
+
+    try:
+        response = requests.post(
+            "http://127.0.0.1:8000/api/v1/ai/analyze",
+            json=payload,
+            timeout=45,
+        )
+        return jsonify(response.json()), response.status_code
+
+    except requests.RequestException:
+        return jsonify({
+            "status": "error",
+            "message": "AI service is temporarily unavailable."
+        }), 503
+
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
