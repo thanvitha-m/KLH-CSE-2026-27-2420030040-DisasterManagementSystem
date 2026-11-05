@@ -1,0 +1,150 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evacuation | DisasterGuard AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .evac-container {
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 24px;
+        }
+        .evac-card {
+            background: white;
+            color: #15263b;
+            padding: 28px;
+            border-radius: 16px;
+            margin: 20px 0;
+            box-shadow: 0 5px 20px rgba(0,0,0,.08);
+        }
+        .evac-card h2 { color: #087f70; }
+        .evac-card p { margin: 12px 0; }
+        .warning {
+            padding: 16px;
+            border-radius: 10px;
+            background: #fff1df;
+            color: #754600;
+            margin-top: 20px;
+        }
+        .route-score {
+            font-size: 28px;
+            font-weight: bold;
+            color: #087f70;
+        }
+    </style>
+</head>
+<body>
+    <div class="evac-container">
+        <h1>Intelligent Evacuation Recommendations</h1>
+        <p>Compare simulated routes using hazard severity,
+           distance, road blockage and crowd density.</p>
+
+        <p>API Status: <strong>{{ api_status }}</strong></p>
+
+
+<div class="evac-card">
+    <h2>Customize Simulated Road Conditions</h2>
+    <p>Change conditions to see how the recommendation adapts.</p>
+
+    <form method="POST" action="/evacuation">
+        <h3>Route A - Main Road</h3>
+
+        <label>Hazard Level (0-5)</label>
+        <input type="number" name="route_a_hazard"
+               min="0" max="5"
+               value="{{ conditions.route_a_hazard }}"
+               required>
+
+        <label>Crowd Density (0-1)</label>
+        <input type="number" name="route_a_crowd"
+               min="0" max="1" step="0.1"
+               value="{{ conditions.route_a_crowd }}"
+               required>
+
+        <label>
+            <input type="checkbox" name="route_a_blocked"
+                   {% if conditions.route_a_blocked %}checked{% endif %}>
+            Road Blocked
+        </label>
+
+        <hr>
+
+        <h3>Route B - Ring Road</h3>
+
+        <label>Hazard Level (0-5)</label>
+        <input type="number" name="route_b_hazard"
+               min="0" max="5"
+               value="{{ conditions.route_b_hazard }}"
+               required>
+
+        <label>Crowd Density (0-1)</label>
+        <input type="number" name="route_b_crowd"
+               min="0" max="1" step="0.1"
+               value="{{ conditions.route_b_crowd }}"
+               required>
+
+        <label>
+            <input type="checkbox" name="route_b_blocked"
+                   {% if conditions.route_b_blocked %}checked{% endif %}>
+            Road Blocked
+        </label>
+
+        <br><br>
+        <button type="submit">Recalculate Recommended Route</button>
+    </form>
+</div>
+
+        {% if result.recommended_route %}
+        <div class="evac-card">
+            <h2>Recommended Route</h2>
+            <h3>{{ result.recommended_route.name }}</h3>
+
+            <p>Distance:
+                {{ result.recommended_route.distance_km }} km
+            </p>
+            <p>Hazard Level:
+                {{ result.recommended_route.hazard_level }}
+            </p>
+            <p>Crowd Density:
+                {{ result.recommended_route.crowd_density }}
+            </p>
+            <p>Risk Score:</p>
+            <div class="route-score">
+                {{ result.recommended_route.risk_score }}
+            </div>
+            <p>{{ result.message }}</p>
+        </div>
+
+        <h2>Alternative Routes</h2>
+        {% for route in result.alternatives %}
+        <div class="evac-card">
+            <h3>{{ route.name }}</h3>
+            <p>Distance: {{ route.distance_km }} km</p>
+            <p>Hazard Level: {{ route.hazard_level }}</p>
+            <p>Crowd Density: {{ route.crowd_density }}</p>
+            <p>Risk Score: {{ route.risk_score }}</p>
+        </div>
+        {% else %}
+        <p>No alternative routes available.</p>
+        {% endfor %}
+
+        {% else %}
+        <div class="evac-card">
+            <h2>No Recommendation Available</h2>
+            <p>{{ result.message }}</p>
+        </div>
+        {% endif %}
+
+        <div class="warning">
+            <strong>Demonstration Only:</strong>
+            {{ result.disclaimer }}
+            Do not use these recommendations for real emergencies.
+        </div>
+
+        <p><a href="/dashboard">Back to Dashboard</a></p>
+    </div>
+</body>
+</html>
