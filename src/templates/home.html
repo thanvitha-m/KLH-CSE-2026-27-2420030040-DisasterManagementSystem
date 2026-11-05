@@ -1,0 +1,110 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DisasterGuard AI | Emergency Management</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <a class="brand" href="/">🛡 DisasterGuard <span>AI</span></a>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/dashboard">Live Dashboard</a>
+            <a href="/report">Report Emergency</a>
+        </div>
+        <a class="nav-button" href="/dashboard">View Alerts →</a>
+    </nav>
+
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <span class="eyebrow">● SMART DISASTER RESPONSE PLATFORM</span>
+                <h1>Smarter Decisions.<br><span>Safer Communities.</span></h1>
+                <p>
+                    Monitor disaster situations, identify hazardous areas
+                    and explore evacuation recommendations through one
+                    intelligent platform.
+                </p>
+                <div class="hero-actions">
+                    <a class="primary-button" href="/dashboard">Explore Dashboard →</a>
+                    <a class="secondary-button" href="/report">Report an Emergency</a>
+                </div>
+                <div class="hero-note">Accessible emergency information for everyone.</div>
+            </div>
+            <div class="hero-visual">
+                <div class="visual-card">
+                    <div class="visual-top">
+                        <span>DISASTER MONITOR</span>
+                        <span class="live-dot">● DEMO VIEW</span>
+                    </div>
+                    <div class="radar">
+                        <div class="radar-ring ring-one"></div>
+                        <div class="radar-ring ring-two"></div>
+                        <div class="radar-ring ring-three"></div>
+                        <div class="radar-center">⌖</div>
+                        <span class="radar-point point-one"></span>
+                        <span class="radar-point point-two"></span>
+                        <span class="radar-point point-three"></span>
+                    </div>
+                    <div class="visual-bottom">
+                        <div><strong>Hazard monitoring</strong><small>Illustrative map visualization</small></div>
+                        <span class="status-pill">SYSTEM READY</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="features-section">
+            <div class="section-heading">
+                <span class="eyebrow">OUR PLATFORM</span>
+                <h2>One platform. Multiple ways to stay prepared.</h2>
+                <p>Tools designed to support informed disaster response.</p>
+            </div>
+
+            <div class="feature-grid">
+                <a class="feature-card" href="/dashboard">
+                    <div class="feature-icon">⚠️</div>
+                    <h3>Disaster Monitoring</h3>
+                    <p>View recorded disaster alerts and their severity.</p>
+                    <span>Explore alerts →</span>
+                </a>
+                <a class="feature-card" href="/dashboard">
+                    <div class="feature-icon">📍</div>
+                    <h3>Hazard Awareness</h3>
+                    <p>Review hazard information and affected locations.</p>
+                    <span>View dashboard →</span>
+                </a>
+                <a class="feature-card" href="/dashboard">
+                    <div class="feature-icon">🗺️</div>
+                    <h3>Evacuation Planning</h3>
+                    <p>Explore the project's evacuation planning features.</p>
+                    <span>Explore platform →</span>
+                </a>
+                <a class="feature-card" href="/report">
+                    <div class="feature-icon">🚨</div>
+                    <h3>Emergency Reporting</h3>
+                    <p>Submit information about a disaster situation.</p>
+                    <span>Submit a report →</span>
+                </a>
+            </div>
+        </section>
+
+        <section class="callout">
+            <div>
+                <span class="eyebrow">COMMUNITY FIRST</span>
+                <h2>See an emergency? Help us stay informed.</h2>
+                <p>Submit an emergency report through the platform.</p>
+            </div>
+            <a class="primary-button" href="/report">Report Now →</a>
+        </section>
+    </main>
+
+    <footer>
+        <strong>DisasterGuard AI</strong>
+        <span>Academic project prototype · Emergency information should always be verified with official authorities.</span>
+    </footer>
+</body>
+</html>

@@ -1,45 +1,79 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Disaster Management Dashboard</title>
+    <title>Disaster Dashboard | DisasterGuard AI</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
-
 <body>
+    <nav class="navbar">
+        <a class="brand" href="/">🛡 DisasterGuard <span>AI</span></a>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/dashboard">Dashboard</a>
+            <a href="/report">Report Emergency</a>
+        </div>
+        <a class="nav-button" href="/report">+ Report</a>
+    </nav>
 
-    <div class="dashboard">
+    <main class="dashboard">
+        <span class="eyebrow">EMERGENCY MANAGEMENT</span>
+        <h1>Disaster Overview</h1>
+        <p>Monitor recorded disasters and review their current status.</p>
 
-        <h1>AI Disaster Management System</h1>
-
-        <p>Welcome to the Disaster Management Dashboard</p>
-
-        <div class="dashboard-cards">
-
-            <div class="card">
-                <h2>🌪 Disaster Status</h2>
-                <p>Monitor current disaster conditions.</p>
-            </div>
-
-            <div class="card">
-                <h2>⚠ Hazard Zones</h2>
-                <p>Identify areas affected by hazards.</p>
-            </div>
-
-            <div class="card">
-                <h2>🚧 Blocked Routes</h2>
-                <p>View roads that are unavailable.</p>
-            </div>
-
-            <div class="card">
-                <h2>🗺 Evacuation Routes</h2>
-                <p>Find safer evacuation routes.</p>
-            </div>
-
+        <div class="dashboard-status">
+            API connection:
+            <strong>{{ api_status }}</strong>
         </div>
 
-    </div>
+        <div class="dashboard-cards">
+            <div class="card">
+                <h2>🚨 Disaster Records</h2>
+                <p>{{ disasters|length }} recorded disaster(s)</p>
+            </div>
+            <div class="card">
+                <h2>⚠️ Active Alerts</h2>
+                <p>{{ disasters|selectattr('status', 'equalto', 'active')|list|length }} active record(s)</p>
+            </div>
+        </div>
 
+        <h2 class="table-heading">Disaster Records</h2>
+
+        {% if disasters %}
+        <div class="table-wrapper">
+            <table class="disaster-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Severity</th>
+                        <th>Location</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for disaster in disasters %}
+                    <tr>
+                        <td>{{ disaster.name }}</td>
+                        <td>{{ disaster.disaster_type|title }}</td>
+                        <td><span class="severity">{{ disaster.severity|upper }}</span></td>
+                        <td>{{ disaster.location }}</td>
+                        <td>{{ disaster.status|title }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <h3>No disaster records available</h3>
+            <p>Submit an emergency report to add a record.</p>
+        </div>
+        {% endif %}
+
+        <a href="/report" class="primary-button report-link">Submit Emergency Report →</a>
+    </main>
 </body>
 </html>

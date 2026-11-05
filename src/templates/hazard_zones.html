@@ -1,0 +1,81 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hazard Zones | DisasterGuard AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <nav class="navbar">
+        <a class="brand" href="/">🛡 DisasterGuard <span>AI</span></a>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/dashboard">Dashboard</a>
+            <a href="/hazards">Hazard Zones</a>
+            <a href="/report">Report Emergency</a>
+        </div>
+        <a class="nav-button" href="/dashboard">View Alerts →</a>
+    </nav>
+
+    <main class="dashboard">
+        <span class="eyebrow">RISK AWARENESS</span>
+        <h1>Hazard Zone Monitoring</h1>
+        <p>Review recorded hazardous areas and their risk levels.</p>
+
+        <div class="dashboard-status">
+            Hazard API connection:
+            <strong>{{ api_status }}</strong>
+        </div>
+
+        <div class="dashboard-cards">
+            <div class="card">
+                <h2>📍 Recorded Zones</h2>
+                <p>{{ hazard_zones|length }} hazard zone(s)</p>
+            </div>
+            <div class="card">
+                <h2>⚠️ Active Hazards</h2>
+                <p>{{ hazard_zones|selectattr('status', 'equalto', 'active')|list|length }} active zone(s)</p>
+            </div>
+        </div>
+
+        <h2 class="table-heading">Registered Hazard Zones</h2>
+
+        {% if hazard_zones %}
+        <div class="table-wrapper">
+            <table class="disaster-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Hazard Type</th>
+                        <th>Severity</th>
+                        <th>Location</th>
+                        <th>Radius (km)</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for zone in hazard_zones %}
+                    <tr>
+                        <td>{{ zone.name }}</td>
+                        <td>{{ zone.hazard_type|replace('_', ' ')|title }}</td>
+                        <td><span class="severity">{{ zone.severity|upper }}</span></td>
+                        <td>{{ zone.location }}</td>
+                        <td>{{ zone.radius_km }}</td>
+                        <td>{{ zone.status|title }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <h3>No hazard zones registered</h3>
+            <p>Hazard zone records will appear here when added to the system.</p>
+        </div>
+        {% endif %}
+    </main>
+</body>
+</html>

@@ -1,3 +1,4 @@
+from flask import jsonify
 from flask import Flask, render_template, request, redirect, url_for, flash
 import requests
 
@@ -137,6 +138,41 @@ def evacuation():
         conditions=data
     )
 
+
+@app.route("/map")
+def disaster_map():
+    return render_template("map.html")
+
+
+@app.route("/api/map/hazards")
+def map_hazards():
+    try:
+        response = requests.get(
+            f"{API_URL}/api/v1/hazard-zones/",
+            timeout=5
+        )
+        response.raise_for_status()
+        return jsonify(response.json())
+
+    except requests.RequestException:
+        return jsonify({
+            "error": "Hazard service unavailable"
+        }), 503
+
+@app.route("/api/map/recommendation")
+def map_recommendation():
+    try:
+        response = requests.get(
+            f"{API_URL}/api/v1/evacuation/geographic-recommend",
+            timeout=5
+        )
+        response.raise_for_status()
+        return jsonify(response.json())
+
+    except requests.RequestException:
+        return jsonify({
+            "error": "Evacuation service unavailable"
+        }), 503
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)

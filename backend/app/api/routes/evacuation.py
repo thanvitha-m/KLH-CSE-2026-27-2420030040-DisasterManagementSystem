@@ -1,5 +1,8 @@
-
-
+from sqlalchemy.orm import Session
+from fastapi import Depends
+from backend.app.core.database import get_db
+from backend.app.models.hazard_zone import HazardZone
+from backend.app.services.geographic_routing import recommend_geographic_route
 from fastapi import APIRouter
 from pydantic import BaseModel, Field
 from backend.app.services.evacuation_engine import (
@@ -41,3 +44,28 @@ def adaptive_recommendation(conditions: RouteConditions):
     routes[1]["blocked"] = conditions.route_b_blocked
 
     return recommend_route(routes)
+
+@router.get("/geographic-recommend")
+def geographic_recommendation(
+    db: Session = Depends(get_db)
+):
+    hazards = db.query(HazardZone).filter(
+        HazardZone.status.in_(["active", "monitoring"])
+    ).all()
+
+    hazard_data = [
+        {
+            "name": hazard.name,
+            "latitude": hazard.latitude,
+            "longitude": hazard.longitude,
+            "radius_km": hazard.radius_km,
+            "severity": hazard.severity,
+            "status": hazard.status,
+        }
+        for hazard in hazards
+    ]
+
+    result = recommend_geographic_route(hazard_data)
+    result["hazard_zones_analyzed"] = len(hazard_data)
+
+    return result

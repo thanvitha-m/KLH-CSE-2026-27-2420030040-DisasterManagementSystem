@@ -1,0 +1,67 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emergency Reporting | DisasterGuard AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <a class="brand" href="/">🛡 DisasterGuard <span>AI</span></a>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/dashboard">Dashboard</a>
+        </div>
+        <a class="nav-button" href="/dashboard">View Alerts →</a>
+    </nav>
+
+    <main class="report-container">
+        <span class="eyebrow">COMMUNITY EMERGENCY REPORTING</span>
+        <h1>Report an Emergency</h1>
+        <p>Provide accurate information about the incident.</p>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <div class="notice {{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endwith %}
+
+        <form method="POST" class="report-form">
+            <label>Disaster Name</label>
+            <input name="name" placeholder="Example: Hyderabad Flood Alert" minlength="3" maxlength="100" required>
+
+            <label>Disaster Type</label>
+            <select name="disaster_type" required>
+                <option value="">Select disaster type</option>
+                <option value="flood">Flood</option>
+                <option value="earthquake">Earthquake</option>
+                <option value="cyclone">Cyclone</option>
+                <option value="landslide">Landslide</option>
+                <option value="wildfire">Wildfire</option>
+                <option value="other">Other</option>
+            </select>
+
+            <label>Severity</label>
+            <select name="severity" required>
+                <option value="">Select severity</option>
+                <option value="low">Low</option>
+                <option value="moderate">Moderate</option>
+                <option value="high">High</option>
+                <option value="critical">Critical</option>
+            </select>
+
+            <label>Location</label>
+            <input name="location" placeholder="Enter affected location" minlength="2" maxlength="150" required>
+
+            <label>Description</label>
+            <textarea name="description" rows="5" placeholder="Describe the emergency..." minlength="5" maxlength="1000" required></textarea>
+
+            <button type="submit" class="primary-button">Submit Emergency Report</button>
+        </form>
+
+        <p class="safety-note">For immediate danger, contact local emergency services. This academic prototype is not an emergency dispatch service.</p>
+    </main>
+</body>
+</html>
